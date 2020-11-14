@@ -6,7 +6,7 @@ import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit,AfterViewInit {
-  title = 'admin';
+  title = 'trang quản trị';
   constructor(private renderer: Renderer2){}
   ngOnInit() { 
 
