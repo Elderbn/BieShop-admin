@@ -1,18 +1,145 @@
 <div class="breadcrumbs" id="breadcrumbs">
-    <ul class="breadcrumb">
-      <li>
-        <i class="ace-icon fa fa-home home-icon"></i>
-        <a href="#">Trang chủ</a>
-      </li>
-      <li class="active">Quản lý sản phẩm</li>
-    </ul><!-- /.breadcrumb -->
+  <ul class="breadcrumb">
+    <li>
+      <i class="ace-icon fa fa-home home-icon"></i>
+      <a href="#">Trang chủ</a>
+    </li>
+    <li class="active">Quản lý sản phẩm</li>
+  </ul>
+  <div class="nav-search">
+    <p class="pull-right no-margin">
+      <a (click)="createModal()" class="btn btn-success btn-xs">
+        <i class="fa fa-plus"></i>&nbsp;Thêm
+      </a>
+    </p>
   </div>
-  <div class="page-content"> 
-    <div class="row">
-      <div class="col-xs-12">
-        <!-- PAGE CONTENT BEGINS -->
-                   Nội dung trang quản lý sản phẩm
-        <!-- PAGE CONTENT ENDS -->
-      </div><!-- /.col -->
-    </div><!-- /.row -->
-  </div><!-- /.page-content -->
+</div>
+<div class="row">
+
+  <div class="col-xs-12">
+    <!-- PAGE CONTENT BEGINS -->
+    <p-panel header="Tìm kiếm" [style]="{'margin-top': '2px'}">
+      <form class="form-horizontal" role="form" [formGroup]="formsearch"  (ngSubmit)="search()">
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right"> Loại sản phẩm </label>
+          <div class="col-sm-11">
+            <select formControlName="item_group_id">
+              <option *ngFor="let item of listLoaiSP" value="{{item.item_group_id}}">{{item.item_group_name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-1 control-label no-padding-right"></label>
+          <div class="col-sm-11">
+            <button (click)="search()" class="btn btn-sm btn-primary">Tìm kiếm</button>
+          </div>
+        </div>
+      </form> 
+    </p-panel>
+
+    <p-table selectionMode="single" [value]="users" styleClass="p-datatable-gridlines">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 70px; text-align: center;">STT</th>
+          <th style="width: 15%; text-align: left;">Tên sản phẩm</th>
+          <th style="width: 20%; text-align: left;">Giá</th>
+          <th style="text-align: left;">Ảnh</th>
+          <th style="width: 120px; text-align: left;">Tác vụ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item  let-i="rowIndex">
+        <tr>
+          <td style="width: 70px; text-align: center;">{{ i + 1 }}</td>
+          <td>{{ item.item_name }}</td>
+          <td>{{ item.item_price }}</td>
+          <td><img style="width: 80px;" src="{{item.item_image}}" alt=""></td>
+          <td class="action-col" >
+            <div class="btn-group">
+              <!-- <button title="" class="btn btn-xs btn-white btn-default"  (click)="openUpdateModal(item)">  
+                <i class="ace-icon fa fa-edit"></i>
+              </button> -->
+              <button title="" class="btn btn-xs btn-white btn-default" (click)="onDelete(item)">
+                <i class="ace-icon fa fa-trash"></i>
+              </button>
+            </div>  
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <!-- PAGE CONTENT ENDS -->
+  </div>
+  <div class="col-xs-12" style="text-align: right;">
+    <ngb-pagination [collectionSize]="totalRecords" [pageSize]="pageSize" [(page)]="page" [maxSize]="10" [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+<div *ngIf="showUpdateModal" id="createUserModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg full-height-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4  *ngIf="isCreate" class="modal-title">Nhập thông tin sản phẩm</h4>
+          <h4 *ngIf="!isCreate" class="modal-title">Sửa thông tin sản phẩm</h4>
+        </div>
+        <form *ngIf="doneSetupForm" [formGroup]="formdata"  (ngSubmit)="onSubmit(formdata.value)" class="form-horizontal utehy-form">
+          <div class="modal-body no-padding">
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label no-padding-right"> Tên sản phẩm (<span style="color: red;">*</span>)</label>
+              <div class="col-sm-5">
+                <input type="text" placeholder="Tên sản phẩm" formControlName="tenSP"/>
+                <div *ngIf="submitted && f.tenSP.errors" class="invalid-feedback">
+                  <div *ngIf="f.tenSP.errors.required">Tên là bắt buộc</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label no-padding-right"> Loại sản phẩm (<span style="color: red;">*</span>)</label>
+              <div class="col-sm-5">
+                <select formControlName="loaiSP">
+                  <option *ngFor="let item of listLoaiSP" value="{{item.item_group_id}}">{{item.item_group_name}}</option>
+                </select>
+                <div *ngIf="submitted && f.loaiSP.errors" class="invalid-feedback">
+                  <div *ngIf="f.loaiSP.errors.required">Loại là bắt buộc</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label no-padding-right"> Giá (<span style="color: red;">*</span>)</label>
+              <div class="col-sm-5">
+                <input type="text" placeholder="Giá sản phẩm" formControlName="gia"/>
+                <div *ngIf="submitted && f.gia.errors" class="invalid-feedback">
+                  <div *ngIf="f.gia.errors.required">Giá là bắt buộc</div>
+                </div>
+              </div>
+            </div>
+              
+            <div class="form-group">
+              <label class="col-sm-2 control-label no-padding-right"> Ảnh đại diện</label>
+              <div class="col-sm-10">
+                <p-fileUpload #file_image mode="advanced" [showUploadButton]="false" cancelLabel="Hủy" chooseLabel ="Chọn ảnh"   multiple="false" accept="image/*" maxFileSize="1000000">
+                    <ng-template pTemplate="content">
+                        <img *ngIf="user && user.image_url" style="height: 100px;width: 100px;" [src]="user.image_url">
+                    </ng-template>
+              </p-fileUpload>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-sm" (click)="Reset()">
+            <i class="fa fa-bell"></i> Làm mới
+          </button>
+          <button type="submit" class="btn btn-success btn-sm btn-submit">
+            <i class="fa fa-save"></i> Đồng ý
+          </button>
+          <button type="button" class="btn btn-default btn-sm" (click)="closeModal()">
+            <i class="fa fa-times"></i> Đóng lại
+          </button>
+        </div>
+      </form>  
+      </div>
+    </div>
+  </div>
+ 
