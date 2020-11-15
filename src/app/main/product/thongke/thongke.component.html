@@ -1,0 +1,35 @@
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+      <li>
+        <i class="ace-icon fa fa-home home-icon"></i>
+        <a href="#">Trang chủ</a>
+      </li>
+      <li class="active">Quản lý loại sản phẩm</li>
+    </ul><!-- /.breadcrumb -->
+  </div>
+  <div class="page-content"> 
+    <div class="row">
+      <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+    <p-table selectionMode="single" [value]="thongke" styleClass="p-datatable-gridlines">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 70px; text-align: center;">STT</th>
+            <th style="width: 15%; text-align: left;">Tên sản phẩm</th>
+            <th style="width: 20%; text-align: left;">Giá</th>
+            <th style="width: 20%; text-align: left;">Số lượng đã bán</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item  let-i="rowIndex">
+          <tr>
+            <td style="width: 70px; text-align: center;">{{ i + 1 }}</td>
+            <td>{{ item.item_name }}</td>
+            <td>{{ item.item_price }}</td>
+            <td>{{ item.so_luong }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+        <!-- PAGE CONTENT ENDS -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.page-content -->

@@ -1,10 +1,14 @@
 import { Role } from "./role";
 export class User {
-    id: number;
-    username: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    role: Role;
+    user_id: number;
+    hoten: string;
+    diachi: string;
+    gioitinh: string;
+    email: string;
+    taikhoan: string;
+    matkhau: string;
+    role: string;
+    image_url: string;
+    ngaysinh: Date;
     token?: string;
 }

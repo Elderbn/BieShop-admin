@@ -5,10 +5,11 @@ import { OrderComponent } from './order/order.component';
 import { ProductComponent } from './product/product.component';
 import { TypeComponent } from './type/type.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ThongkeComponent } from './thongke/thongke.component';
 
 @NgModule({
   declarations: [ 
-    OrderComponent,ProductComponent,TypeComponent
+    OrderComponent,ProductComponent,TypeComponent, ThongkeComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +26,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
       {
         path: 'type',
         component: TypeComponent,
+      },
+      {
+        path: 'thongke',
+        component: ThongkeComponent,
       },
   ]),  
   ]
